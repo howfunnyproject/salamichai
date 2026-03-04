@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ঈদ সালামি কুইজ - Premium Edition</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@400;600;700&display=swap');
+
+        :root {
+            --primary: #0F3D3E;
+            --secondary: #1a5556;
+            --accent: #D4AF37;
+            --accent-light: #E8D8C3;
+            --bg-light: #F5F0E6;
+            --text-dark: #0F3D3E;
+            --text-muted: #6b7280;
+            --success: #6b9b37;
+            --border: #E8D8C3;
+            --shadow-sm: 0 4px 12px rgba(15, 61, 62, 0.08);
+            --shadow-md: 0 8px 24px rgba(15, 61, 62, 0.12);
+            --shadow-lg: 0 16px 40px rgba(15, 61, 62, 0.16);
+        }
+
+        body {
+            font-family: 'Noto Serif Bengali', 'Crimson Text', serif;
+            background: linear-gradient(135deg, rgba(245, 240, 230, 0.92) 0%, rgba(232, 216, 195, 0.92) 100%), url('https://images.unsplash.com/vector-1771471776440-7f5b7aa882fd?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat fixed;
+            min-height: 100vh;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes glow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* PAGE 1: SETUP */
+        .page-1 {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: slideInUp 0.8s ease-out;
+            margin-top: 40px;
+        }
+
+        .header-emoji {
+            font-size: 5rem;
+            display: inline-block;
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .header h1 {
+            font-family: 'Crimson Text', serif;
+            font-size: 3.2rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            position: relative;
+        }
+
+        .header h1::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            margin: 12px auto 0;
+        }
+
+        .header p {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 700px;
+            margin: 20px auto 0;
+            font-weight: 400;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 36px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            animation: slideInUp 0.8s ease-out;
+            animation-fill-mode: both;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .form-card:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .form-card:nth-child(2) { animation-delay: 0.1s; }
+        .form-card:nth-child(3) { animation-delay: 0.2s; }
+        .form-card:nth-child(4) { animation-delay: 0.3s; }
+
+        .card-title {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-title span {
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
+            background: #F5F0E6;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .gender-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .gender-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #F5F0E6;
+        }
+
+        .gender-option:hover {
+            border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .gender-option input[type="radio"] {
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        .gender-option input[type="radio"]:checked + label {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .questions-section {
+            max-height: 800px;
+            overflow-y: auto;
+            padding: 24px;
+            background: rgba(232, 216, 195, 0.5);
+            border-radius: 14px;
+            margin-top: 20px;
+        }
+
+        .questions-section::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .questions-section::-webkit-scrollbar-track {
+            background: rgba(201, 169, 97, 0.1);
+            border-radius: 10px;
+        }
+
+        .questions-section::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        .question-item {
+            background: white;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 0;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        .question-item:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 18px;
+            background: #F5F0E6;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .question-header:hover {
+            background: #E8D8C3;
+        }
+
+        .question-checkbox {
+            width: 24px;
+            height: 24px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .question-text-wrapper {
+            flex: 1;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .question-text {
+            font-size: 1rem;
+            color: var(--text-dark);
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .question-options {
+            display: none;
+            padding: 20px 18px;
+            border-top: 1px solid var(--border);
+            background: #FFFBF8;
+        }
+
+        .question-options.active {
+            display: grid;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            background: white;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-item:hover {
+            border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.03);
+        }
+
+        .option-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .option-text {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .option-item input[type="radio"]:checked + .option-text {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .option-item input[type="radio"]:checked ~ .checkmark {
+            opacity: 1;
+        }
+
+        .checkmark {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Poppins', sans-serif;
+            display: inline-block;
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #2d3555 100%);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* PAGE 2: QUIZ */
+        .page-2 {
+            animation: fadeIn 0.8s ease-out;
+            margin-top: 40px;
+        }
+
+        .progress-container {
+            margin-bottom: 40px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #b89a50);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px rgba(201, 169, 97, 0.5);
+        }
+
+        .quiz-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--text-dark);
+        }
+
+        .quiz-header h2 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .quiz-header p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .info-box {
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .receiver-input-section {
+            background: rgba(212, 175, 55, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 1.5px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .receiver-input-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .receiver-input-section input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
+            background: white;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        .receiver-input-section input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .receiver-input-section input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1);
+        }
+
+        .question-counter {
+            text-align: center;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .large-question {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 32px;
+            font-weight: 700;
+            line-height: 1.6;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .quiz-option-btn {
+            padding: 16px 20px;
+            border: 1.5px solid var(--border);
+            background: #F5F0E6;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .quiz-option-btn:hover {
+            border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.08);
+            transform: translateX(4px);
+        }
+
+        .quiz-option-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            font-weight: 700;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .btn-nav {
+            flex: 1;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+        }
+
+        /* PAGE 3: RESULT */
+        .page-3 {
+            animation: fadeIn 0.8s ease-out;
+            margin-top: 40px;
+        }
+
+        .result-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 60px 40px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            text-align: center;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .result-emoji {
+            font-size: 5rem;
+            margin-bottom: 24px;
+            display: inline-block;
+            animation: glow 0.6s ease-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .result-greeting {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .result-subtext {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .salami-certificate {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05));
+            border: 2px solid var(--accent);
+            border-radius: 16px;
+            padding: 50px 40px;
+            margin: 40px 0;
+            box-shadow: inset 0 1px 3px rgba(212, 175, 55, 0.1);
+            animation: slideInUp 0.7s ease-out 0.2s both;
+        }
+
+        .certificate-title {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .salami-amount-display {
+            font-family: 'Crimson Text', serif;
+            font-size: 4rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -2px;
+        }
+
+        .salami-currency {
+            font-size: 1.1rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .score-breakdown {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            padding-top: 20px;
+            border-top: 1px solid rgba(201, 169, 97, 0.2);
+            margin-top: 20px;
+        }
+
+        .screenshot-note {
+            background: rgba(107, 155, 55, 0.08);
+            border-left: 4px solid #6b9b37;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 40px 0;
+            color: var(--text-dark);
+            font-weight: 500;
+            animation: slideInUp 0.7s ease-out 0.3s both;
+            line-height: 1.6;
+        }
+
+        .screenshot-note strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .another-quiz-link {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), #2d3555);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            margin-top: 24px;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 0.3px;
+        }
+
+        .another-quiz-link:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            padding: 48px 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            animation: slideInUp 0.4s ease-out;
+            position: fixed;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 61, 62, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-overlay.active {
+            display: block;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--accent);
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .modal h2 {
+            font-family: 'Crimson Text', serif;
+            color: var(--primary);
+            margin-bottom: 16px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .modal p {
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .generated-link {
+            background: #F5F0E6;
+            padding: 16px 14px;
+            border-radius: 8px;
+            border: 1.5px solid var(--border);
+            font-family: 'Poppins', monospace;
+            font-size: 0.8rem;
+            margin: 24px 0;
+            color: var(--primary);
+            word-break: break-all;
+            line-height: 1.5;
+            transition: all 0.3s ease;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .generated-link:hover {
+            border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .form-card, .quiz-wrapper, .result-wrapper {
+                padding: 24px;
+            }
+
+            .salami-amount-display {
+                font-size: 2.8rem;
+            }
+
+            .quiz-option-btn {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+
+            .large-question {
+                font-size: 1.3rem;
+            }
+
+            .modal {
+                width: 85%;
+                padding: 32px 24px;
+            }
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- PAGE 1: SETUP -->
+        <div id="page1" class="page-1">
+            <div class="header">
+                <div class="header-emoji">⭐🌙</div>
+                <h1>ঈদ সালামি কুইজ</h1>
+                <p>একটি সুন্দর এবং স্মার্ট উপায়ে আপনার প্রিয়জনদের সালামি দিন। প্রশ্নের উত্তর সঠিক করলে বেশি সালামি পাবে। 💝</p>
+            </div>
+
+            <!-- BASIC INFO -->
+            <div class="form-card">
+                <div class="card-title"><span>👤</span> আপনার তথ্য</div>
+                <div class="form-group">
+                    <label for="giverName">আপনার সম্পূর্ণ নাম</label>
+                    <input type="text" id="giverName" placeholder="যেমন: আবু হাসান" required>
+                </div>
+                <div class="form-group">
+                    <label for="maxSalami">সর্বোচ্চ সালামির পরিমাণ (টাকা)</label>
+                    <input type="number" id="maxSalami" placeholder="যেমন: 500" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label>আপনার লিঙ্গ নির্বাচন করুন</label>
+                    <div class="gender-group">
+                        <div class="gender-option">
+                            <input type="radio" id="male" name="gender" value="male" checked>
+                            <label for="male">পুরুষ</label>
+                        </div>
+                        <div class="gender-option">
+                            <input type="radio" id="female" name="gender" value="female">
+                            <label for="female">মহিলা</label>
+                        </div>
+                        <div class="gender-option">
+                            <input type="radio" id="other" name="gender" value="other">
+                            <label for="other">অন্যান্য</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTION SELECTION -->
+            <div class="form-card">
+                <div class="card-title"><span>❓</span> প্রশ্ন নির্বাচন করুন</div>
+                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">যে প্রশ্নগুলি আপনার কুইজে রাখতে চান তার পাশে টিক মার্ক দিন। তারপর সঠিক উত্তর নির্বাচন করুন।</p>
+                <div id="questionsContainer" class="questions-section"></div>
+            </div>
+
+            <!-- GENERATE BUTTON -->
+            <div class="text-center">
+                <button class="btn btn-primary" onclick="generateLink()" style="font-size: 1.05rem; padding: 16px 40px;">আমার সালামি লিংক তৈরি করুন 🔗</button>
+            </div>
+        </div>
+
+        <!-- PAGE 2: QUIZ -->
+        <div id="page2" class="page-2 hidden">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="quiz-wrapper">
+                <div class="quiz-header">
+                    <h2 id="quizGiverName"></h2>
+                    <p id="quizDescription"></p>
+                </div>
+
+                <div class="receiver-input-section">
+                    <label id="receiverNameLabel">আপনার নাম লিখুন</label>
+                    <input type="text" id="receiverName" placeholder="সালামি পাওয়ার জন্য নাম দিন">
+                </div>
+
+                <div class="info-box" id="infoBox"></div>
+
+                <div class="question-counter" id="questionCounter"></div>
+                <div class="large-question" id="currentQuestion"></div>
+                <div class="quiz-options" id="optionsContainer"></div>
+
+                <div class="quiz-navigation">
+                    <button class="btn btn-secondary btn-nav" id="prevBtn" onclick="previousQuestion()" style="display: none;">← পূর্ববর্তী</button>
+                    <button class="btn btn-primary btn-nav" id="nextBtn" onclick="nextQuestion()">পরবর্তী →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 3: RESULT -->
+        <div id="page3" class="page-3 hidden">
+            <div class="result-wrapper">
+                <div class="result-emoji" id="resultEmoji">🎉</div>
+                <div class="result-greeting">ধন্যবাদ <span id="resultReceiverName"></span>!</div>
+                <div class="result-subtext" id="resultSubtext"></div>
+
+                <div class="salami-certificate">
+                    <div class="certificate-title">সালামি সার্টিফিকেট</div>
+                    <div class="salami-amount-display" id="salamiAmount">0</div>
+                    <div class="salami-currency">টাকা</div>
+                    <div class="score-breakdown" id="scoreDetail"></div>
+                </div>
+
+                <div class="screenshot-note" id="screenshotNote"></div>
+
+                <button class="another-quiz-link" onclick="location.href=window.location.origin + window.location.pathname">আমিও সালামি দিতে চাই 🎁</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL OVERLAY -->
+    <div id="modalOverlay" class="modal-overlay" onclick="closeLinkModal()"></div>
+
+    <!-- LINK GENERATION MODAL -->
+    <div id="linkModal" class="modal">
+        <span class="modal-close" onclick="closeLinkModal()">&times;</span>
+        <h2>🎉 আপনার লিংক প্রস্তুত!</h2>
+        <p>এই লিংক শেয়ার করুন আপনার সালামি প্রত্যাশীদের সাথে:</p>
+        <div class="generated-link" id="generatedLink"></div>
+        <button class="btn btn-primary" onclick="copyLink()" style="width: 100%;">লিংক কপি করুন 📋</button>
+    </div>
+
+    <script>
+        // ===== QUESTIONS DATABASE =====
+        const allQuestions = [
+            { 
+                id: 1, 
+                text: "ঈদের দিনে আমি সাধারণত কী করি?", 
+                options: ["সবার বাসায় ঘুরি", "বাসায় থাকি", "ছবি তুলি", "ঘুমাই"]
+            },
+            { 
+                id: 2, 
+                text: "আমার ফেভারিট চা কোনটি?", 
+                options: ["দুধ চা", "চা খাই না", "লাল চা", "যা পাই তাই"]
+            },
+            { 
+                id: 3, 
+                text: "আমি সাধারণত কতটার দিকে ঘুমাতে যাই?", 
+                options: ["রাত ১০–११२টার মধ্যে", "११२–२টার মধ্যে", "००२–४टার মধ्যে", "নির্দিষ্ট সময় নেই"]
+            },
+            { 
+                id: 4, 
+                text: "আমার এনার্জি লেভেল সবচেয়ে বেশি থাকে—", 
+                options: ["রাতে", "দুপুরে", "ভোরে", "ডেডলাইনের আগে"]
+            },
+            { 
+                id: 5, 
+                text: "আমার স্বভাব কোনটির কাছাকাছি?", 
+                options: ["শান্ত কিন্তু গভীর", "সবসময় সিরিয়াস", "হালকা কৌতুকপূর্ণ", "আনপ্রেডিক্টেবল"]
+            },
+            { 
+                id: 6, 
+                text: "আমি বেশি—", 
+                options: ["শ্রোতা (Listener)", "বক্তা (Speaker)", "পর্যবেক্ষক (Observer)", "মিশ্র স্বভাবের"]
+            },
+            { 
+                id: 7, 
+                text: "আমি হঠাৎ চুপ হয়ে গেলে সাধারণত তার মানে—", 
+                options: ["ভাবছি", "রাগ করেছি", "ক্লান্ত", "সবকিছু বিশ্লেষণ করছি"]
+            },
+            { 
+                id: 8, 
+                text: "আমি সাধারণত বেশি react করি—", 
+                options: ["সিরিয়াস আলোচনায়", "র‍্যান্ডম মিমে", "অন্যায় দেখলে", "তেমন কিছুতেই না"]
+            },
+            { 
+                id: 9, 
+                text: "আমি বেশি পছন্দ করি—", 
+                options: ["ছোট সার্কেল", "বড় গ্রুপ", "একান্তে এক-টু-ওয়ান কথা বলা", "অনলাইন কনভারসেশন"]
+            },
+            { 
+                id: 10, 
+                text: "আমার WhatsApp রিপ্লাই স্পিড কেমন?", 
+                options: ["বিদ্যুৎগতিতে", "००२–३ ঘণ্টা পরে", "পরের দিন", "মুড অনুযায়ী"]
+            },
+            { 
+                id: 11, 
+                text: "আমি বেশি compliment দিই নাকি roast করি?", 
+                options: ["Compliment", "Roast", "দুটোই পরিস্থিতি অনুযায়ী"]
+            },
+            { 
+                id: 12, 
+                text: "আমি কোন ধরনের রসিকতা বেশি করি?", 
+                options: ["ডার্ক হিউমার", "ইন্টেলেকচুয়াল", "স্যাটায়ার/সারকাস্টিক", "নিরীহ ড্যাড জোক"]
+            },
+            { 
+                id: 13, 
+                text: "আমি সাধারণত কোন রঙের পোশাক বেশি পরি?", 
+                options: ["কালো", "সাদা", "নীল", "লাল", "সবুজ", "মেরুন/বারগান্ডি", "বেইজ বা হালকা আর্থ টোন", "সামনে যা পাই"]
+            },
+            { 
+                id: 14, 
+                text: "আমি রাগ করলে সাধারণত কী করি?", 
+                options: ["চুপ হয়ে যাই", "সরাসরি বলে দিই", "ইগনোর করি", "মিম শেয়ার করি"]
+            },
+            { 
+                id: 15, 
+                text: "আমাকে দেখে তোমার প্রথমে কী মনে পড়ে?", 
+                options: ["হাসি", "বুদ্ধি", "বন্ধুসুলভ ভাব", "সুন্দর চুল"]
+            },
+            { 
+                id: 16, 
+                text: "আমি ডানহাতি না বাঁহাতি?", 
+                options: ["ডানহাতি", "বাঁহাতি", "দুটোই"]
+            },
+            { 
+                id: 17, 
+                text: "আমার কাছে সালামি চাইতে আসার আসল কারণ কী?", 
+                options: ["টাকা", "ট্র্যাডিশন", "বন্ডিং", "চাপ"]
+            },
+            { 
+                id: 18, 
+                text: "আমি যদি বলি 'এই বছর সালামি নাই', তুমি—", 
+                options: ["তর্ক করবে", "ইমোশনাল ব্ল্যাকমেইল করবে", "মেনে নিয়ে চলে যাবে", "পরের বছর ডাবল নেবে"]
+            },
+            { 
+                id: 19, 
+                text: "আমি বেশি কী পছন্দ করি?", 
+                options: ["শান্ত সময়", "গভীর আলোচনা", "সম্মান", "টাকা"]
+            },
+            { 
+                id: 20, 
+                text: "ঈদের পর আমাকে ট্রিট দেবে?", 
+                options: ["অবশ্যই", "দেখা যাক", "টাকা নাই", "Block me now"]
+            }
+        ];
+
+        // ===== STATE MANAGEMENT =====
+        let quizConfig = {
+            giverName: "",
+            maxSalami: 0,
+            maxScore: 100,
+            gender: "male",
+            selectedQuestions: [],
+            correctAnswers: {}
+        };
+
+        let quizState = {
+            currentQuestion: 0,
+            answers: {},
+            receiverName: ""
+        };
+
+        // ===== ENCRYPTION HELPER =====
+        const SECRET_KEY = "eidSalamiQuiz2026";
+
+        function encryptData(data) {
+            return CryptoJS.AES.encrypt(JSON.stringify(data), SECRET_KEY).toString();
+        }
+
+        function decryptData(encrypted) {
+            try {
+                const bytes = CryptoJS.AES.decrypt(encrypted, SECRET_KEY);
+                return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // ===== PAGE 1: SETUP =====
+        function initPage1() {
+            renderQuestions();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById("questionsContainer");
+            
+            container.innerHTML = allQuestions.map(q => `
+                <div class="question-item">
+                    <div class="question-header" onclick="toggleQuestion(${q.id})">
+                        <input type="checkbox" class="question-checkbox" id="checkbox_${q.id}" onchange="handleCheckboxChange(${q.id})" onclick="event.stopPropagation()">
+                        <div class="question-text-wrapper">
+                            <div class="question-number">প্রশ্ন ${q.id}</div>
+                            <div class="question-text">${q.text}</div>
+                        </div>
+                    </div>
+                    <div class="question-options" id="options_${q.id}">
+                        <div class="options-grid">
+                            ${q.options.map((option, idx) => `
+                                <label class="option-item">
+                                    <input type="radio" name="correct_q${q.id}" value="${idx}" onchange="handleCorrectAnswerChange(${q.id}, ${idx})">
+                                    <span class="option-text">${option}</span>
+                                    <span class="checkmark">✓</span>
+                                </label>
+                            `).join("")}
+                        </div>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        function toggleQuestion(questionId) {
+            const checkbox = document.getElementById(`checkbox_${questionId}`);
+            checkbox.checked = !checkbox.checked;
+            handleCheckboxChange(questionId);
+        }
+
+        function handleCheckboxChange(questionId) {
+            const checkbox = document.getElementById(`checkbox_${questionId}`);
+            const optionsDiv = document.getElementById(`options_${questionId}`);
+
+            if (checkbox.checked) {
+                optionsDiv.classList.add("active");
+            } else {
+                optionsDiv.classList.remove("active");
+                delete quizConfig.correctAnswers[questionId];
+            }
+        }
+
+        function handleCorrectAnswerChange(questionId, optionIndex) {
+            quizConfig.correctAnswers[questionId] = optionIndex;
+        }
+
+        function generateLink() {
+            const giverName = document.getElementById("giverName").value.trim();
+            const maxSalami = parseInt(document.getElementById("maxSalami").value);
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+
+            if (!giverName || !maxSalami) {
+                alert("নাম এবং সালামির পরিমাণ পূরণ করুন!");
+                return;
+            }
+
+            const selectedIds = Object.keys(quizConfig.correctAnswers).map(Number);
+
+            if (selectedIds.length === 0) {
+                alert("কমপক্ষে একটি প্রশ্ন নির্বাচন করুন!");
+                return;
+            }
+
+            quizConfig.giverName = giverName;
+            quizConfig.maxSalami = maxSalami;
+            quizConfig.maxScore = 100;
+            quizConfig.gender = gender;
+            quizConfig.selectedQuestions = selectedIds;
+
+            // Create encrypted data
+            const quizData = {
+                giver: giverName,
+                max: maxSalami,
+                limit: 100,
+                gender: gender,
+                questions: selectedIds,
+                answers: quizConfig.correctAnswers
+            };
+
+            const encrypted = encryptData(quizData);
+            const baseUrl = window.location.href.split('?')[0].split('#')[0];
+            const generatedLink = `${baseUrl}?q=${encodeURIComponent(encrypted)}`;
+
+            document.getElementById("generatedLink").textContent = generatedLink;
+            document.getElementById("linkModal").classList.add("active");
+            document.getElementById("modalOverlay").classList.add("active");
+        }
+
+        function copyLink() {
+            const link = document.getElementById("generatedLink").textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                alert("লিংক কপি হয়েছে! 🎉");
+                closeLinkModal();
+            });
+        }
+
+        function closeLinkModal() {
+            document.getElementById("linkModal").classList.remove("active");
+            document.getElementById("modalOverlay").classList.remove("active");
+        }
+
+        // ===== PAGE 2: QUIZ =====
+        function initPage2() {
+            const params = new URLSearchParams(window.location.search);
+            const encrypted = params.get("q");
+
+            if (!encrypted) {
+                alert("Invalid quiz link!");
+                window.location.href = window.location.pathname;
+                return;
+            }
+
+            const quizData = decryptData(decodeURIComponent(encrypted));
+
+            if (!quizData) {
+                alert("কুইজ ডেটা খুঁজে পাওয়া যায়নি!");
+                window.location.href = window.location.pathname;
+                return;
+            }
+
+            quizConfig = {
+                giverName: quizData.giver,
+                maxSalami: quizData.max,
+                maxScore: quizData.limit,
+                gender: quizData.gender,
+                selectedQuestions: quizData.questions,
+                correctAnswers: quizData.answers
+            };
+
+            document.getElementById("quizGiverName").textContent = quizConfig.giverName;
+            document.getElementById("quizDescription").textContent = `ঈদের শুভেচ্ছা জানাই। নিচের প্রশ্ন গুলোর উত্তর দাও এবং ${quizConfig.giverName} ${quizConfig.gender === 'female' ? 'আপুর' : 'ভাইয়ের'} তরফ থেকে সালামি বুঝে নাও।`;
+            
+            // Info box
+            document.getElementById("infoBox").textContent = `নিচের প্রশ্ন গুলো ${quizConfig.giverName} ${quizConfig.gender === 'female' ? 'আপুর' : 'ভাইয়ের'} সম্পর্কে। যত বেশি সঠিক উত্তর দিতে পারবে তত বেশি সালামি পাবে।`;
+
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const currentQIdx = quizState.currentQuestion;
+            const questionId = quizConfig.selectedQuestions[currentQIdx];
+            const question = allQuestions.find(q => q.id === questionId);
+
+            const total = quizConfig.selectedQuestions.length;
+            document.getElementById("questionCounter").textContent = `প্রশ্ন ${currentQIdx + 1} / ${total}`;
+            document.getElementById("progressFill").style.width = `${((currentQIdx + 1) / total) * 100}%`;
+
+            document.getElementById("currentQuestion").textContent = question.text;
+
+            const optionsContainer = document.getElementById("optionsContainer");
+            optionsContainer.innerHTML = question.options.map((option, idx) => `
+                <button class="quiz-option-btn ${quizState.answers[questionId] === idx ? 'selected' : ''}" onclick="selectAnswer(${questionId}, ${idx})">
+                    ${option}
+                </button>
+            `).join("");
+
+            document.getElementById("prevBtn").style.display = currentQIdx > 0 ? "block" : "none";
+            document.getElementById("nextBtn").textContent = currentQIdx === total - 1 ? "সালামি বুঝে নিন →" : "পরবর্তী →";
+        }
+
+        function selectAnswer(questionId, optionIndex) {
+            quizState.answers[questionId] = optionIndex;
+            renderQuestion();
+        }
+
+        function nextQuestion() {
+            const currentQIdx = quizState.currentQuestion;
+            const total = quizConfig.selectedQuestions.length;
+
+            if (currentQIdx === total - 1) {
+                const receiverName = document.getElementById("receiverName").value.trim();
+                if (!receiverName) {
+                    alert("আপনার নাম লিখুন!");
+                    return;
+                }
+
+                quizState.receiverName = receiverName;
+                showResult();
+            } else {
+                quizState.currentQuestion++;
+                renderQuestion();
+            }
+        }
+
+        function previousQuestion() {
+            if (quizState.currentQuestion > 0) {
+                quizState.currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        // ===== PAGE 3: RESULT =====
+        function showResult() {
+            let correctCount = 0;
+            quizConfig.selectedQuestions.forEach(qId => {
+                if (quizState.answers[qId] === quizConfig.correctAnswers[qId]) {
+                    correctCount++;
+                }
+            });
+
+            const totalQuestions = quizConfig.selectedQuestions.length;
+            const scorePercent = Math.round((correctCount / totalQuestions) * 100);
+            const appliedScore = Math.min(scorePercent, quizConfig.maxScore);
+            const salamiAmount = Math.round((appliedScore / 100) * quizConfig.maxSalami);
+
+            let emoji = "😢";
+            if (scorePercent >= 80) emoji = "🎉";
+            else if (scorePercent >= 60) emoji = "😊";
+            else if (scorePercent >= 40) emoji = "🤔";
+
+            const genderText = quizConfig.gender === 'female' ? 'আপু' : 'ভাই';
+
+            document.getElementById("resultEmoji").textContent = emoji;
+            document.getElementById("resultReceiverName").textContent = quizState.receiverName;
+            document.getElementById("resultSubtext").textContent = `${quizConfig.giverName} ${genderText === 'আপু' ? 'আপুর' : 'ভাইয়ের'} তরফ থেকে আপনার জন্য এই পরিমাণ সালামি বরাদ্দ করেছেন`;
+            document.getElementById("salamiAmount").textContent = salamiAmount;
+            document.getElementById("scoreDetail").textContent = `${correctCount}/${totalQuestions} সঠিক উত্তর • ${scorePercent}%`;
+            document.getElementById("screenshotNote").textContent = `📸 এই পেজের স্ক্রিনশট নিয়ে ${quizConfig.giverName} ${genderText} কে দেখান! এটিই আপনার সালামির প্রমাণ। 🎁`;
+
+            document.getElementById("page2").classList.add("hidden");
+            document.getElementById("page3").classList.remove("hidden");
+        }
+
+        // ===== INITIALIZATION =====
+        function init() {
+            const params = new URLSearchParams(window.location.search);
+
+            if (params.has("q")) {
+                document.getElementById("page1").classList.add("hidden");
+                document.getElementById("page2").classList.remove("hidden");
+                initPage2();
+            } else {
+                initPage1();
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
